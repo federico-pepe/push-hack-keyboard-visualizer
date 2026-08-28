@@ -52,6 +52,7 @@ jobs:
       - name: Commit release.json
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
+          RELEASED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
           git fetch origin main
           git checkout -f main
           git config user.name "github-actions[bot]"
@@ -59,7 +60,8 @@ jobs:
           cat > release.json << EOF
           {
             "version": "${VERSION}",
-            "download_url": "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/keyboard-visualizer.tar.gz"
+            "download_url": "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/keyboard-visualizer.tar.gz",
+            "released_at": "${RELEASED_AT}"
           }
           EOF
           git add release.json
