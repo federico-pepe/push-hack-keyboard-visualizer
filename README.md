@@ -4,13 +4,16 @@ Renders a live piano-keyboard visualization on Push 3's own screen, driven by
 the notes **actually sounding in Live** — after any octave-shift or Scale/
 In-Key transform — rather than the pad grid's raw pre-transform MIDI.
 
-See `discovery/live-note-keyboard-viz.md` for the full feasibility writeup and
-design rationale.
+A hack for [`push-hack`](https://github.com/federico-pepe/ableton-push-hack)
+(Push 3's on-device hack framework) — install it via that repo's `push-store`
+hack, or build and deploy it yourself, see "Build & deploy" below.
 
 ## Requirements
 
-**On-device screen takeover and the mobile web view's note feed both require
-`push-manager` and `push-display` to also be installed and running.** This
+**Needs the `push-hack` framework's `push-manager` and `push-display` hacks
+also installed and running** (from
+[federico-pepe/ableton-push-hack](https://github.com/federico-pepe/ableton-push-hack)).
+This
 hack never touches Push's shared-memory framebuffer itself — it's an HTTP
 client of push-manager's `/api/display/*` API, which in turn needs
 push-display's LD_PRELOAD hook attached to actually show anything on Push's
@@ -39,8 +42,7 @@ that raw stream would show the wrong notes whenever either is active.
 ## How it works
 
 1. This hack creates its own writable ALSA sequencer port, **"Keyboard Viz
-   In"** (mirrors push-manager's own "Push Manager In" port pattern,
-   `hacks/push-manager/src/midi.go:838-848`).
+   In"** (mirrors push-manager's own "Push Manager In" port pattern).
 2. On Push's own screen, route a Live track's MIDI **Out** to this port
    (stock Live MIDI routing — no script install, no Max for Live device). One
    time per project/track, similar in spirit to Browser Bridge's one-time
@@ -105,10 +107,26 @@ on Push's own screen. It shows:
 
 ## Build & deploy
 
+**Via Push Store (recommended):** install `push-hack`'s `push-manager` +
+`push-display` + `push-store` hacks first, then install this one from
+`push-store`'s web UI or `push-store install keyboard-visualizer` on-device —
+it's listed in [ableton-push-hack's catalogue](https://github.com/federico-pepe/ableton-push-hack/blob/main/catalogue/catalog.json).
+
+**Manually**, from a clone of this repo:
 ```bash
-cd hacks/keyboard-visualizer && PATH=$PATH:/usr/local/go/bin make
-./scripts/install.sh --hack keyboard-visualizer --build
+PATH=$PATH:/usr/local/go/bin make            # build for Push 3 (linux/amd64)
 ```
+This produces `build/keyboard-visualizer` (and copies it to the repo root).
+Deploy it to `/data/push-hack/hacks/keyboard-visualizer/` alongside this
+repo's `hack.json`, and register/start it the same way the framework's own
+`install.sh` does (create `/etc/init.d/push-hack-keyboard-visualizer`,
+`start-stop-daemon` it).
+
+**Releasing a new version:** bump `hack.json`'s `version`, then
+`git tag vX.Y.Z && git push origin vX.Y.Z` — `.github/workflows/release.yml`
+builds, publishes the release tarball, and updates `release.json` so
+push-store's next install/update picks it up automatically, no action needed
+in the main repo's catalogue.
 
 ## API
 
