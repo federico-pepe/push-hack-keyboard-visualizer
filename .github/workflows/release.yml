@@ -34,7 +34,7 @@ jobs:
         run: |
           mkdir -p dist/keyboard-visualizer
           cd src
-          GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o ../dist/keyboard-visualizer/keyboard-visualizer .
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-s -w" -o ../dist/keyboard-visualizer/keyboard-visualizer .
           cd ..
           cp hack.json dist/keyboard-visualizer/hack.json
           chmod +x dist/keyboard-visualizer/keyboard-visualizer
