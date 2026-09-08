@@ -78,8 +78,10 @@ Live normally throughout, whether or not the keyboard is currently shown.
 
 ## Web view (phone/tablet)
 
-Open `http://push.local:7705` on any device on the same network for a
-mobile-friendly, phone-in-portrait keyboard view — independent of on-device
+Open this hack from Push Manager's menu bar (its port is assigned
+dynamically by Push Hack Catalog at install time) on any device on the
+same network for a mobile-friendly, phone-in-portrait keyboard view —
+independent of on-device
 display takeover, so it works whether or not the Shift+Note chord is active
 on Push's own screen. It shows:
 
@@ -130,7 +132,7 @@ in the main repo's catalogue.
 
 ## API
 
-- `GET /api/status` (port 7705) — `{"status":"ok","name":...,"version":...,"port":7705,"notes_held":<n>}`.
+- `GET /api/status` — `{"status":"ok","name":...,"version":...,"port":<assigned port>,"notes_held":<n>}`.
 - `GET /api/notes/stream` — SSE feed of currently held MIDI notes, e.g.
   `data: {"notes":[60,64,67]}\n\n` on every change (sent once immediately on
   connect, then on every change).
