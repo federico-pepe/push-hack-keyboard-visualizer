@@ -5,8 +5,9 @@ the notes **actually sounding in Live** — after any octave-shift or Scale/
 In-Key transform — rather than the pad grid's raw pre-transform MIDI.
 
 A hack for [`push-hack`](https://github.com/federico-pepe/ableton-push-hack)
-(Push 3's on-device hack framework) — install it via that repo's `push-store`
-hack, or build and deploy it yourself, see "Build & deploy" below.
+(Push 3's on-device hack framework) — install it via that repo's Push Hack
+Catalog (`push-catalog`), or build and deploy it yourself, see "Build &
+deploy" below.
 
 ## Requirements
 
@@ -109,10 +110,10 @@ on Push's own screen. It shows:
 
 ## Build & deploy
 
-**Via Push Store (recommended):** install `push-hack`'s `push-manager` +
-`push-display` + `push-store` hacks first, then install this one from
-`push-store`'s web UI or `push-store install keyboard-visualizer` on-device —
-it's listed in [ableton-push-hack's catalogue](https://github.com/federico-pepe/ableton-push-hack/blob/main/catalogue/catalog.json).
+**Via Push Hack Catalog (recommended):** install `push-hack`'s `push-manager` +
+`push-display` + `push-catalog` hacks first, then install this one from
+`push-catalog`'s web UI or `push-catalog install keyboard-visualizer` on-device —
+it's listed in [ableton-push-hack's catalog](https://github.com/federico-pepe/ableton-push-hack/blob/main/catalog/catalog.json).
 
 **Manually**, from a clone of this repo:
 ```bash
@@ -127,8 +128,8 @@ repo's `hack.json`, and register/start it the same way the framework's own
 **Releasing a new version:** bump `hack.json`'s `version`, then
 `git tag vX.Y.Z && git push origin vX.Y.Z` — `.github/workflows/release.yml`
 builds, publishes the release tarball, and updates `release.json` so
-push-store's next install/update picks it up automatically, no action needed
-in the main repo's catalogue.
+push-catalog's next install/update picks it up automatically, no action needed
+in the main repo's catalog.
 
 ## API
 
