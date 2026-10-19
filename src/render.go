@@ -106,9 +106,24 @@ func renderKeyboard(held [128]bool) *image.NRGBA {
 	return img
 }
 
-// pushFrame POSTs a rendered frame to push-manager's display image endpoint.
+// frameClient is the one client pushFrame reuses: Push keeps a frame buffer
+// and remembers that an older push-manager has no raw-frame route. frameMu
+// serializes use, since that buffer is not safe for concurrent calls.
+var (
+	frameMu     sync.Mutex
+	frameClient *pmclient.Client
+	frameURL    string
+)
+
+// pushFrame sends a rendered frame to push-manager: raw frame route when it
+// has one, PNG image route when it does not (pmclient.Client.Push).
 func pushFrame(pushManagerURL string, img *image.NRGBA) error {
-	return pmclient.New(pushManagerURL).PushImage(img)
+	frameMu.Lock()
+	defer frameMu.Unlock()
+	if frameClient == nil || frameURL != pushManagerURL {
+		frameClient, frameURL = pmclient.New(pushManagerURL), pushManagerURL
+	}
+	return frameClient.Push(img)
 }
 
 // setDisplayMode sets push-manager's display mode (0=passthrough, 2=takeover).
