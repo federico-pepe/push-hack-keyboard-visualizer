@@ -46,8 +46,8 @@ that raw stream would show the wrong notes whenever either is active.
    In"** (mirrors push-manager's own "Push Manager In" port pattern).
 2. On Push's own screen, route a Live track's MIDI **Out** to this port
    (stock Live MIDI routing — no script install, no Max for Live device). One
-   time per project/track, similar in spirit to Browser Bridge's one-time
-   activation, but pure stock Live UI.
+   time per project/track, similar in spirit to the one-time selection of the
+   PushHack Remote Script in a control-surface slot, but pure stock Live UI.
 3. Whatever Live actually sends out that route — post-transform — arrives on
    the port. This hack tracks held notes (`map`-like `[128]bool`, set on Note
    On, cleared on Note Off; velocity-0 Note On is treated as Note Off) and
